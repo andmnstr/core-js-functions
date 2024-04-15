@@ -18,7 +18,8 @@
  *
  */
 function getCurrentFunctionName() {
-  throw new Error('Not implemented');
+  getCurrentFunctionName.name = 'getCurrentFunctionName';
+  return getCurrentFunctionName.name;
 }
 
 /**
@@ -32,8 +33,11 @@ function getCurrentFunctionName() {
  *   getFunctionBody(hiHello) => "function hiHello() { console.log('hello world'); }"
  *
  */
-function getFunctionBody(/* func */) {
-  throw new Error('Not implemented');
+function getFunctionBody(func) {
+  if (func !== undefined && func !== null) {
+    return func.toString();
+  }
+  return '';
 }
 
 /**
@@ -50,8 +54,13 @@ function getFunctionBody(/* func */) {
  *  ]) => [0, 1, 2]
  *
  */
-function getArgumentsCount(/* funcs */) {
-  throw new Error('Not implemented');
+function getArgumentsCount(funcs) {
+  const num = [];
+  funcs.forEach((func) => {
+    num.push(func.length);
+  });
+
+  return num;
 }
 
 /**
@@ -70,8 +79,9 @@ function getArgumentsCount(/* funcs */) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(/* exponent */) {
-  throw new Error('Not implemented');
+function getPowerFunction(exponent) {
+  const power = (i) => i ** exponent;
+  return power;
 }
 
 /**
@@ -105,8 +115,19 @@ function getPolynom() {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const cache = {};
+  let result;
+
+  return function (num) {
+    if (num in cache) {
+      result = cache[num];
+      return result;
+    }
+    cache[num] = func(num);
+    result = cache[num];
+    return result;
+  };
 }
 
 /**
@@ -124,8 +145,19 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  let tries = 0;
+
+  return function () {
+    while (tries < attempts) {
+      try {
+        tries = func();
+      } catch {
+        console.log();
+      }
+    }
+    return tries;
+  };
 }
 
 /**
@@ -168,8 +200,11 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args1 */) {
-  throw new Error('Not implemented');
+function partialUsingArguments(fn, ...args1) {
+  return function (...remainingArgs) {
+    const combinedArgs = [...args1, ...remainingArgs];
+    return fn(...combinedArgs);
+  };
 }
 
 /**
@@ -189,8 +224,18 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  function sequence(i) {
+    let count = i;
+    return function countNum() {
+      const result = count;
+      count += 1;
+      return result;
+    };
+  }
+
+  const nextNumber = sequence(startFrom);
+  return nextNumber;
 }
 
 module.exports = {

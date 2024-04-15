@@ -119,7 +119,7 @@ function memoize(func) {
   const cache = {};
   let result;
 
-  return function (num) {
+  return function getvalue(num) {
     if (num in cache) {
       result = cache[num];
       return result;
@@ -148,12 +148,12 @@ function memoize(func) {
 function retry(func, attempts) {
   let tries = 0;
 
-  return function () {
+  return function getTry() {
     while (tries < attempts) {
       try {
         tries = func();
       } catch {
-        console.log();
+        tries = 0;
       }
     }
     return tries;
@@ -201,7 +201,7 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
 function partialUsingArguments(fn, ...args1) {
-  return function (...remainingArgs) {
+  return function passArgs(...remainingArgs) {
     const combinedArgs = [...args1, ...remainingArgs];
     return fn(...combinedArgs);
   };
